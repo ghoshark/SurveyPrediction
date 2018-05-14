@@ -1,0 +1,24 @@
+Package: SurveyPrediction
+Type: Package
+Title: This package predicts the customer satisfaction level
+Version: 1.1
+Author: Arka Ghosh
+Maintainer: The package maintainer <arkaghosh.nb@gmail.com>
+Description: This package predicts the customer satisfaction level: Satisfied or Dissatisfied
+License: Free
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Imports: readr,
+    tidyr,
+    dplyr,
+    ggplot2,
+    rpart,
+    lattice,
+    rpart.plot,
+    caret,
+    lubridate,
+    party,
+    randomForest,
+    rattle,
+    RColorBrewer

@@ -1,0 +1,29 @@
+#example to deploy predictive model with plumber
+#https://shirinsplayground.netlify.com/2018/01/plumber
+# https://www.r-bloggers.com/making-an-r-based-ml-model-accessible-through-a-simple-api/
+# https://www.programmableweb.com/news/how-to-turn-your-predictive-models-apis-using-domino/how-to/2015/07/22?page=2
+# https://www.r-bloggers.com/how-to-make-your-machine-learning-model-available-as-an-api-with-the-plumber-package/
+# plumber.R
+
+#* Echo back the input
+#* @param msg The message to echo
+#* @get /echo
+function(msg=""){
+  list(msg = paste0("The message is: '", msg, "'"))
+}
+
+#* Plot a histogram
+#* @png
+#* @get /plot
+function(){
+  rand <- rnorm(100)
+  hist(rand)
+}
+
+#* Return the sum of two numbers
+#* @param a The first number to add
+#* @param b The second number to add
+#* @post /sum
+function(a, b){
+  as.numeric(a) + as.numeric(b)
+}

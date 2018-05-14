@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1526284412108.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D5EC78AF",
+    "lastKnownWriteTime" : 1526284249,
+    "last_content_update" : 1526285154440,
+    "path" : "C:/Data_Science/SurveyPrediction/R/survey_score.R",
+    "project_path" : "R/survey_score.R",
+    "properties" : {
+        "cursorPosition" : "44,29",
+        "scrollLine" : "5"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
