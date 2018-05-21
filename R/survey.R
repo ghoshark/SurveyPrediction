@@ -22,7 +22,7 @@ survey <- function(filenames) {
     survey <- read.csv(filenames,header = TRUE, na.strings = c("--",""))
   }
   else  {
-    survey <- readxl::read_xlsx("C:/Data_Science/Text_Analysis/IPO_R&D_Raw.xlsx",sheet = "Survey Raw data", col_names = TRUE)
+    survey <- readxl::read_xlsx("C:/Data_Science/SurveyPrediction/IPO_R&D_Raw.xlsx",sheet = "Survey Raw data", col_names = TRUE)
       }
 
 #Remove spaces from column names

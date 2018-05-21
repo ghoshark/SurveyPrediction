@@ -40,6 +40,10 @@
   newdata$survey.Category.Tier1 <- as.factor(newdata$survey.Category.Tier1)
   newdata$survey.Category.Tier3 <- as.factor(newdata$survey.Category.Tier3)
 
+  #Load the current RDA files
+  load(file = "data/survey_model_pruned.rda")
+  load(file = "data/survey_model.rda")
+
   #incident_model is included with the package
   newdata$survey.Satisfaction.Rating <- as.vector(predict(survey_model_pruned, newdata = newdata, type="class"))
   #Write the result output to a csv file
