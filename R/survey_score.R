@@ -1,3 +1,4 @@
+
 #' @title Survey Score
 #' @description This function return the satisfaction rating prediction
 #' @aliases survey_score
@@ -45,6 +46,7 @@
   load(file = "data/survey_model.rda")
 
   #incident_model is included with the package
+
   newdata$survey.Satisfaction.Rating <- as.vector(predict(survey_model_pruned, newdata = newdata, type="class"))
   #Write the result output to a csv file
   write.csv(newdata,file="C:/Data_Science/SurveyPrediction/output.csv", row.names = FALSE)
