@@ -6,13 +6,12 @@ load(file = "data/survey_model.rda")
 
 MODEL_VERSION <- "0.0.1"
 VARIABLES <- list(
-  survey.Ticket.Country = "Ticket Country = India",
-  survey.Ticket.Assigned.Group = "survey Ticket Assigned Group = SYMPHONY_WW_L2",
-  survey.Product.Name = "Product Name = Symphony",
-  survey.Category.Tier1 = "Category Tier1 = Troubleshoot",
-  survey.Category.Tier3 = "Category.Tier3 = License",
+  survey.Ticket.Country = "Ticket Country",
+  survey.Ticket.Assigned.Group = "survey Ticket Assigned Group",
+  survey.Product.Name = "Product Name",
+  survey.Category.Tier1 = "Category Tier1",
+  survey.Category.Tier3 = "Category.Tier3",
   survey.Satisfaction.Rating = "Successful submission will result in a calculated customer satisfaction Probability of either SATISFIED or DISSATIAFIED"
-
 )
 
 #' @get /Healthcheck
@@ -245,14 +244,20 @@ transform_input <- function(survey.Ticket.Country, survey.Ticket.Assigned.Group,
 
 #' @get /SurveyPrediction
 #' @html
-#' @param survey.Ticket.Country India
-#' @param survey.Ticket.Assigned.Group SYMPHONY_WW_L2
-#' @param survey.Product.Name Symphony
-#' @param survey.Category.Tier1 Troubleshoot
-#' @param survey.Category.Tier3 License
+#' @param survey.Ticket.Country
+#' @param survey.Ticket.Assigned.Group
+#' @param survey.Product.Name
+#' @param survey.Category.Tier1
+#' @param survey.Category.Tier3
 
 predict_survey <- function(survey.Ticket.Country, survey.Ticket.Assigned.Group, survey.Product.Name,survey.Category.Tier1,survey.Category.Tier3)
   {
+  survey.Ticket.Country = survey.Ticket.Country
+  survey.Ticket.Assigned.Group = survey.Ticket.Assigned.Group
+  survey.Product.Name = survey.Product.Name
+  survey.Category.Tier1 = survey.Category.Tier1
+  survey.Category.Tier3 = survey.Category.Tier3
+
   valid_input <- validate_input(survey.Ticket.Country, survey.Ticket.Assigned.Group, survey.Product.Name,survey.Category.Tier1,survey.Category.Tier3)
   if (valid_input == "OK")  {
   transform_input(survey.Ticket.Country, survey.Ticket.Assigned.Group, survey.Product.Name,survey.Category.Tier1,survey.Category.Tier3)
@@ -261,6 +266,10 @@ predict_survey <- function(survey.Ticket.Country, survey.Ticket.Assigned.Group, 
    #incident_model is included with the package
    newdata$survey.Satisfaction.Rating <- as.vector(predict(survey_model_pruned, newdata = newdata, type="class"))
    newdata$survey.Satisfaction.Probability <- predict(survey_model_pruned, newdata = newdata, type="prob")
+   #pruned models are having some issues - the numbers don't change for any combination of input- need to check
+   newdata$survey.Satisfaction.Rating <- as.vector(predict(survey_model, newdata = newdata, type="class"))
+   newdata$survey.Satisfaction.Probability <- predict(survey_model, newdata = newdata, type="prob")
+
    #Write the result output to a csv file
    write.csv(newdata,file="C:/Data_Science/SurveyPrediction/output.csv", row.names = FALSE)
 
@@ -270,7 +279,7 @@ predict_survey <- function(survey.Ticket.Country, survey.Ticket.Assigned.Group, 
    Satisfaction.Probability <- paste("Satisfaction Probability",sat_prob,sep=": ")
    Dissatisfaction.Probability <- paste("Dissatisfaction Probability",dissat_prob,sep=": ")
    result <- paste(Satisfaction.Probability,Dissatisfaction.Probability,Satisfaction.Rating,sep= "\n")
-
+   #result <- newdata$survey.Satisfaction.Probability[2]
   }
 
   else {
