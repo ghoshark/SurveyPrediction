@@ -1,3 +1,11 @@
+# script name:
+# plumber.R
+
+# set API title and description to show up in http://localhost:8000/__swagger__/
+
+#' @apiTitle Run predictions for customer satisfaction with Decision Tree model
+#' @apiDescription This API takes takes inputs and returns a prediction on whether a customer will be satisfied or not.
+
 library(plumber)
 
 #Load the current RDA files
@@ -242,21 +250,30 @@ transform_input <- function(survey.Ticket.Country, survey.Ticket.Assigned.Group,
   survey.Category.Tier3 <- as.factor(tolower(survey.Category.Tier3))
 }
 
-#' @get /SurveyPrediction
+source(file = "R/survey.R")
+#' @get /Generate_Survey_Model
 #' @html
-#' @param survey.Ticket.Country
-#' @param survey.Ticket.Assigned.Group
-#' @param survey.Product.Name
-#' @param survey.Category.Tier1
-#' @param survey.Category.Tier3
+create_model <- function() {
+filenames <- "C:/Data_Science/SurveyPrediction/IPO_R&D_Raw.xlsx"
+survey(filenames)
+return("The model has been generated.")
+}
 
-predict_survey <- function(survey.Ticket.Country, survey.Ticket.Assigned.Group, survey.Product.Name,survey.Category.Tier1,survey.Category.Tier3)
+#' @get /Survey_Prediction
+#' @html
+#' @param Category.Tier3 Examples: License, Application Functionality, Administration, Installation etc
+#' @param Category.Tier1 Examples: Request, Troubleshoot, Reset etc
+#' @param Ticket.Assigned.Group Examples: ANALYTICS_WW_L2,SYMPHONY_WW_L2,MASTERDATA_WW_L3,FJTU_SERVICE_DESK_RD_L2,PHENIX_WW_L3 etc
+#' @param Ticket.Country Examples: Spain, Mexico, Singapore, China, Japan etc
+#' @param Product.Name Examples: PTC CreoView, Viewer, Git Repo CLI client, Autocad - Mechanical, TeamForge, Cadence, Squoring etc
+
+predict_survey <- function(Ticket.Country, Ticket.Assigned.Group, Product.Name, Category.Tier1, Category.Tier3)
   {
-  survey.Ticket.Country = survey.Ticket.Country
-  survey.Ticket.Assigned.Group = survey.Ticket.Assigned.Group
-  survey.Product.Name = survey.Product.Name
-  survey.Category.Tier1 = survey.Category.Tier1
-  survey.Category.Tier3 = survey.Category.Tier3
+  survey.Ticket.Country = Ticket.Country
+  survey.Ticket.Assigned.Group = Ticket.Assigned.Group
+  survey.Product.Name = Product.Name
+  survey.Category.Tier1 = Category.Tier1
+  survey.Category.Tier3 = Category.Tier3
 
   valid_input <- validate_input(survey.Ticket.Country, survey.Ticket.Assigned.Group, survey.Product.Name,survey.Category.Tier1,survey.Category.Tier3)
   if (valid_input == "OK")  {

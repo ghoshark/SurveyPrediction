@@ -19,7 +19,8 @@ survey <- function(filenames) {
   #read the incidents file
   # we know that file has some missing values as "--" and "", so replacing them with NA while importing
   if (file.exists(filenames)) {
-    survey <- read.csv(filenames,header = TRUE, na.strings = c("--",""))
+    #survey <- read.csv(filenames,header = TRUE, na.strings = c("--",""))
+    survey <- readxl::read_xlsx(filenames,sheet = "Survey Raw data", col_names = TRUE)
   }
   else  {
     survey <- readxl::read_xlsx("C:/Data_Science/SurveyPrediction/IPO_R&D_Raw.xlsx",sheet = "Survey Raw data", col_names = TRUE)
