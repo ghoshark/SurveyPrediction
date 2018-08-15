@@ -31,7 +31,7 @@ survey <- function(filenames) {
 names(survey) <- make.names(names(survey))
 
 #Pick only relavant columns
-survey1 <- data.frame(survey$Ticket.Country,survey$Ticket.Assigned.Group,survey$Product.Name,survey$Category.Tier1,survey$Category.Tier3, survey$Satisfaction.Rating )
+survey1 <- data.frame(survey$Ticket.SESA.ID,survey$Ticket.Country,survey$Product.Name,survey$Category.Tier1,survey$Category.Tier3, survey$Satisfaction.Rating )
 #Change the datatype to character and merge the values
 survey1$survey.Satisfaction.Rating <- as.character(survey1$survey.Satisfaction.Rating)
 
@@ -54,15 +54,17 @@ write.csv(survey1,file="survey1.csv", row.names = TRUE)
 
 #partition dataset into training and test datasets
 #Option 1 to partition data
-indexes = sample(1:nrow(survey1), size=0.8*nrow(survey1))
+indexes = sample(1:nrow(survey1), size=0.85*nrow(survey1))
 train <- survey1[indexes,]
 test <- survey1[-indexes,]
 
 #Decision Tree Model; Satisfaction Rating, ctree gives the levels not found error
-#survey_model <- party::ctree(survey.Satisfaction.Rating ~ survey.Ticket.Country+survey.Ticket.Region+survey.Ticket.Assigned.Group+survey.Product.Name+survey.Category.Tier1+survey.Category.Tier2+survey.Category.Tier3, data=survey1)
-survey_model <- rpart::rpart(survey.Satisfaction.Rating ~ survey.Ticket.Country+survey.Ticket.Assigned.Group+survey.Product.Name+survey.Category.Tier1+survey.Category.Tier3, data=survey1, method = "class")
+
+#survey_model <- party::ctree(survey.Satisfaction.Rating ~ survey.Ticket.Country+survey.Product.Name+survey.Category.Tier1+survey.Category.Tier3, data=survey1)
+survey_model <- rpart::rpart(survey.Satisfaction.Rating ~ survey.Ticket.Country+survey.Product.Name+survey.Category.Tier1+survey.Category.Tier3, data=train, method = "class")
+
 # rattle::fancyRpartPlot(survey_model_pruned, uniform=TRUE, main="Pruned Classification Tree")
-save(survey_model, file="data/survey_model.rda")
+save(survey_model, file="C:/Data_Science/SurveyPrediction/data/survey_model.rda")
 
 # Optimize the Decision Tree by pruning
 
@@ -79,18 +81,17 @@ rpart::plotcp(survey_model)
 # Prune the tree to create an optimal decision tree
 survey_model_pruned <- rpart::prune(survey_model,cp= survey_model$cptable[which.min(survey_model$cptable[,"xerror"]),"CP"])
 # rattle::fancyRpartPlot(survey_model_pruned, uniform=TRUE, main="Pruned Classification Tree")
-save(survey_model_pruned, file="data/survey_model_pruned.rda")
+save(survey_model_pruned, file="C:/Data_Science/SurveyPrediction/data/survey_model_pruned.rda")
 
 # Test the prediction model and check accuracy
-# plot(survey_model)
-# rattle::fancyRpartPlot(survey_model)
-# print(summary(survey_model))
+plot(survey_model)
+rattle::fancyRpartPlot(survey_model)
+print(summary(survey_model))
 # Note that without type="class" it gives a 2 column output with the probablities for Satisifed and Dissatisfied.
-# survey.Satisfaction.Rating_P <- predict(survey_model_pruned, newdata = test, type="class")
-# result <- data.frame(test,survey.Satisfaction.Rating_P)
-# xtab <- table(test$survey.Satisfaction.Rating,survey.Satisfaction.Rating_P)
-# caret::confusionMatrix(xtab)
-
+survey.Satisfaction.Rating_P <- predict(survey_model, newdata = test, type="class")
+result <- data.frame(test,survey.Satisfaction.Rating_P)
+xtab <- table(test$survey.Satisfaction.Rating,survey.Satisfaction.Rating_P)
+caret::confusionMatrix(xtab)
 return(NULL)
 
 }

@@ -42,8 +42,8 @@
   newdata$survey.Category.Tier3 <- as.factor(newdata$survey.Category.Tier3)
 
   #Load the current RDA files
-  load(file = "data/survey_model_pruned.rda")
-  load(file = "data/survey_model.rda")
+  load(file = "C:/Data_Science/SurveyPrediction/data/survey_model_pruned.rda")
+  load(file = "C:/Data_Science/SurveyPrediction/data/survey_model.rda")
 
   #incident_model is included with the package
 
